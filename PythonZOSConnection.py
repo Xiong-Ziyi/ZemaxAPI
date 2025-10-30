@@ -102,6 +102,56 @@ print('Connected to OpticStudio')
 print('Serial #: ', TheApplication.SerialCode)
 
 # Insert Code Here
+<<<<<<< HEAD
 TheSystemData = TheSystem.SystemData
 
 TheSystemData.Aperture.ApetureValue = 10.0
+=======
+
+# Define System Explore
+SysExplore = TheSystem.SystemData
+
+# Set Title and Notes
+SysExplore.TitleNotes.Title = "Paraxial Zoom Lens Generator"
+SysExplore.TitleNotes.Notes = "Generate a paraxial zoom lens based on the calculation of the positive and negative compensated zoom lens formulas."
+SysExplore.TitleNotes.Author = "Ziyi Xiong"
+
+# Set Aperture
+SysExplore.Aperture.ApertureType = ZOSAPI.SystemData.ZemaxApertureType.ImageSpaceFNum
+SysExplore.Aperture.ApertureValue = 5.6
+
+# Set Fields
+SysExplore.Fields.SetFieldType(ZOSAPI.SystemData.FieldType.ParaxialImageHeight)
+SysExplore.Fields.ApplyFieldWizard(ZOSAPI.SystemData.FieldPattern.EqualAreaY, 9, 6.6, 0, 0, 0, True, False)
+
+# Set Wavelengths
+# SysExplore.Wavelengths.SelectWavelengthPreset(ZOSAPI.SystemData.WavelengthPreset.FdC_Visible)
+
+# Remove wavelengths
+num_fields = SysExplore.Wavelengths.NumberOfWavelengths
+# print("Number of wavelengths before removal: ", num_fields)
+
+if num_fields > 1:
+    for i in range(num_fields, 2, -1):
+        SysExplore.Wavelengths.RemoveWavelength(i)
+
+# Set Wavelengths Values of Cellphone lens
+SysExplore.Wavelengths.GetWavelength(1).Wavelength = 1
+SysExplore.Wavelengths.GetWavelength(1).Weight = 0
+SysExplore.Wavelengths.AddWavelength(0.6563, 11)
+SysExplore.Wavelengths.AddWavelength(0.5876, 24)
+SysExplore.Wavelengths.AddWavelength(0.5461, 24)
+SysExplore.Wavelengths.AddWavelength(0.4861, 12)
+SysExplore.Wavelengths.AddWavelength(0.4360, 3)
+SysExplore.Wavelengths.AddWavelength(0.4047, 1)
+
+SysExplore.Wavelengths.PrimaryWavelength(3)
+
+# Define Lens Data
+#SysLDE = TheSystem.LDE
+#SysLDE.InsertNewSurfaceAt(1)
+#SysLDE.InsertNewSurfaceAt(1)
+#SysLDE.InsertNewSurfaceAt(1)
+
+
+>>>>>>> 5303dc27ff7fe391fc3f83e64308f9f2cbc30126
