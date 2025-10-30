@@ -181,7 +181,7 @@ Surface[2].Thickness = 50.0
 Surface[2].Comment = "Front Fixed Group"
 
 #Surface[2].GetSurfaceCell(Paraxial_Focal_Length).DoubleValue = 20.0
-Surface[2].SurfaceData.Par1.DoubleValue = 20.0
+Surface[2].SurfaceData.Par1 = 20.0
 
 
     

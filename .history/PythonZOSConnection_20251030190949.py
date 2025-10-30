@@ -124,7 +124,7 @@ SysExplore.Fields.ApplyFieldWizard(ZOSAPI.SystemData.FieldPattern.EqualAreaY, 9,
 
 # Remove wavelengths
 num_wavelengths = SysExplore.Wavelengths.NumberOfWavelengths
-print("Number of wavelengths before insertion: ", num_wavelengths)
+print("Number of wavelengths before removal: ", num_wavelengths)
 
 '''
 if num_fields > 1:
@@ -142,46 +142,12 @@ if num_wavelengths == 1:
     SysExplore.Wavelengths.AddWavelength(0.4360, 3)
     SysExplore.Wavelengths.AddWavelength(0.4047, 1)
 
-num_wavelengths = SysExplore.Wavelengths.NumberOfWavelengths
-print("Number of wavelengths after insertion: ", num_wavelengths)
-
 # Define Lens Data
 SysLDE = TheSystem.LDE
 num_surfaces = SysLDE.NumberOfSurfaces
 print("Number of surfaces before insertion: ", num_surfaces)
 
 if num_surfaces == 3:
-    for i in range(4):
-        SysLDE.AddSurface()
-
-num_surfaces = SysLDE.NumberOfSurfaces
-print("Number of surfaces after insertion: ", num_surfaces)
-
-Surface=[SysLDE.GetSurfaceAt(i) for i in range(0, num_surfaces)] # Use a list to store all surfaces objects
-
-'''
-for i in range(1, num_surfaces - 1):
-    s = SysLDE.GetSurfaceAt(i)
-    Surface.append(s)
-'''
-Surface[1].Thickness = 5.0
-Surface[1].Comment = "Dummy"
-
-Surface[2].IsStop = True 
-
-Paraxial_Surface = ZOSAPI.Editors.LDE.SurfaceType.Paraxial
-Paraxial_Focal_Length = ZOSAPI.Editors.LDE.SurfaceColumn.Par1
-
-# Change Surface Types to Paraxial
-for i in range(2, num_surfaces - 1):
-    st = SysLDE.GetSurfaceAt(i).GetSurfaceTypeSettings(Paraxial_Surface)
-    Surface[i].ChangeType(st)
-    
-Surface[2].Thickness = 50.0
-Surface[2].Comment = "Front Fixed Group"
-
-#Surface[2].GetSurfaceCell(Paraxial_Focal_Length).DoubleValue = 20.0
-Surface[2].SurfaceData.Par1.DoubleValue = 20.0
-
-
-    
+    SysLDE.InsertNewSurfaceAt(2) # Insert a new surface before the surface 2
+    SysLDE.InsertNewSurfaceAt(2)
+    SysLDE.InsertNewSurfaceAt(2)

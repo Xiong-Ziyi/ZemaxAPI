@@ -157,31 +157,12 @@ if num_surfaces == 3:
 num_surfaces = SysLDE.NumberOfSurfaces
 print("Number of surfaces after insertion: ", num_surfaces)
 
-Surface=[SysLDE.GetSurfaceAt(i) for i in range(0, num_surfaces)] # Use a list to store all surfaces objects
-
-'''
 for i in range(1, num_surfaces - 1):
-    s = SysLDE.GetSurfaceAt(i)
-    Surface.append(s)
-'''
-Surface[1].Thickness = 5.0
-Surface[1].Comment = "Dummy"
+    Surface_
 
-Surface[2].IsStop = True 
+Surface_1 = SysLDE.GetSurfaceAt(1)
+Surface_1.Thickness = 5.0
 
-Paraxial_Surface = ZOSAPI.Editors.LDE.SurfaceType.Paraxial
-Paraxial_Focal_Length = ZOSAPI.Editors.LDE.SurfaceColumn.Par1
-
-# Change Surface Types to Paraxial
-for i in range(2, num_surfaces - 1):
-    st = SysLDE.GetSurfaceAt(i).GetSurfaceTypeSettings(Paraxial_Surface)
-    Surface[i].ChangeType(st)
-    
-Surface[2].Thickness = 50.0
-Surface[2].Comment = "Front Fixed Group"
-
-#Surface[2].GetSurfaceCell(Paraxial_Focal_Length).DoubleValue = 20.0
-Surface[2].SurfaceData.Par1.DoubleValue = 20.0
-
-
-    
+Surface_2 = SysLDE.GetSurfaceAt(2)
+Surface_2.IsStop = True
+Surface_2.ChangeType()

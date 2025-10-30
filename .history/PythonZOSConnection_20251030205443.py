@@ -169,19 +169,12 @@ Surface[1].Comment = "Dummy"
 
 Surface[2].IsStop = True 
 
-Paraxial_Surface = ZOSAPI.Editors.LDE.SurfaceType.Paraxial
-Paraxial_Focal_Length = ZOSAPI.Editors.LDE.SurfaceColumn.Par1
+Paraxial = ZOSAPI.Editors.LDE.SurfaceType.Paraxial
 
-# Change Surface Types to Paraxial
 for i in range(2, num_surfaces - 1):
-    st = SysLDE.GetSurfaceAt(i).GetSurfaceTypeSettings(Paraxial_Surface)
-    Surface[i].ChangeType(st)
-    
-Surface[2].Thickness = 50.0
-Surface[2].Comment = "Front Fixed Group"
+    st = SysLDE.GetSurfaceAt(i).GetSurfaceTypeSettings(Paraxial)
+    Surface_Type.append(st)
 
-#Surface[2].GetSurfaceCell(Paraxial_Focal_Length).DoubleValue = 20.0
-Surface[2].SurfaceData.Par1.DoubleValue = 20.0
-
-
+for i in range():
+    SysLDE.GetSurfaceAt(i).ChangeType(Surface_Type[i])
     
