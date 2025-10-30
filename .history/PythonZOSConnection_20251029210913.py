@@ -53,7 +53,7 @@ TheSystem = TheApplication.PrimarySystem
 if TheSystem is None:
     raise Exception("Unable to acquire Primary system")
 
-
+'''
 def reshape(data, x, y, transpose = False):
     """Converts a System.Double[,] to a 2D list for plotting or post processing
     
@@ -94,7 +94,7 @@ def transpose(data):
     if type(data) is not list:
         data = list(data)
     return list(map(list, zip(*data)))
-
+'''
 
 print('Connected to OpticStudio')
 

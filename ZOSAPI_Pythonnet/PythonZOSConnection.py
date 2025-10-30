@@ -1,14 +1,6 @@
 import clr, os, winreg
 from itertools import islice
 
-# This boilerplate requires the 'pythonnet' module.
-# The following instructions are for installing the 'pythonnet' module via pip:
-#    1. Ensure you are running a Python version compatible with PythonNET. Check the article "ZOS-API using Python.NET" or
-#    "Getting started with Python" in our knowledge base for more details.
-#    2. Install 'pythonnet' from pip via a command prompt (type 'cmd' from the start menu or press Windows + R and type 'cmd' then enter)
-#
-#        python -m pip install pythonnet
-
 # determine the Zemax working directory
 aKey = winreg.OpenKey(winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER), r"Software\Zemax", 0, winreg.KEY_READ)
 zemaxData = winreg.QueryValueEx(aKey, 'ZemaxRoot')
@@ -17,26 +9,26 @@ winreg.CloseKey(aKey)
 
 # add the NetHelper DLL for locating the OpticStudio install folder
 clr.AddReference(NetHelper)
-import ZOSAPI_NetHelper # type: ignore
+import ZOSAPI_NetHelper
 
-#pathToInstall = ''
+pathToInstall = ''
 # uncomment the following line to use a specific instance of the ZOS-API assemblies
-pathToInstall = r'\C:\Program Files\Zemax OpticStudio'
+# pathToInstall = r'C:\Program Files\Zemax OpticStudio 20.2'
 
 # connect to OpticStudio
-success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize(pathToInstall)
+success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize(pathToInstall);
 
 zemaxDir = ''
 if success:
-    zemaxDir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory()
-    print('Found OpticStudio at:   %s' + zemaxDir)
+    zemaxDir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory();
+    print('Found OpticStudio at:   %s' % zemaxDir);
 else:
     raise Exception('Cannot find OpticStudio')
 
 # load the ZOS-API assemblies
 clr.AddReference(os.path.join(os.sep, zemaxDir, r'ZOSAPI.dll'))
 clr.AddReference(os.path.join(os.sep, zemaxDir, r'ZOSAPI_Interfaces.dll'))
-import ZOSAPI # type: ignore
+import ZOSAPI
 
 TheConnection = ZOSAPI.ZOSAPI_Connection()
 if TheConnection is None:
@@ -53,8 +45,7 @@ TheSystem = TheApplication.PrimarySystem
 if TheSystem is None:
     raise Exception("Unable to acquire Primary system")
 
-
-def reshape(data, x, y, transpose = False):
+def reshape(self, data, x, y, transpose = False):
     """Converts a System.Double[,] to a 2D list for plotting or post processing
     
     Parameters
@@ -71,14 +62,14 @@ def reshape(data, x, y, transpose = False):
     """
     if type(data) is not list:
         data = list(data)
-    var_lst = [y] * x
+    var_lst = [y] * x;
     it = iter(data)
     res = [list(islice(it, i)) for i in var_lst]
     if transpose:
-        return transpose(res)
+        return self.transpose(res);
     return res
     
-def transpose(data):
+def transpose(self, data):
     """Transposes a 2D list (Python3.x or greater).  
     
     Useful for converting mutli-dimensional line series (i.e. FFT PSF)
@@ -95,13 +86,10 @@ def transpose(data):
         data = list(data)
     return list(map(list, zip(*data)))
 
-
 print('Connected to OpticStudio')
 
 # The connection should now be ready to use.  For example:
 print('Serial #: ', TheApplication.SerialCode)
 
 # Insert Code Here
-TheSystemData = TheSystem.SystemData
-
-TheSystemData.Aperture.ApetureValue = 10.0
+print("Link to ZOSAPI successfully!")

@@ -19,24 +19,24 @@ winreg.CloseKey(aKey)
 clr.AddReference(NetHelper)
 import ZOSAPI_NetHelper # type: ignore
 
-#pathToInstall = ''
+pathToInstall = ''
 # uncomment the following line to use a specific instance of the ZOS-API assemblies
-pathToInstall = r'\C:\Program Files\Zemax OpticStudio'
+#pathToInstall = r'C:\C:\Program Files\Zemax OpticStudio'
 
 # connect to OpticStudio
-success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize(pathToInstall)
+success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize(pathToInstall);
 
 zemaxDir = ''
 if success:
-    zemaxDir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory()
-    print('Found OpticStudio at:   %s' + zemaxDir)
+    zemaxDir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory();
+    print('Found OpticStudio at:   %s' + zemaxDir);
 else:
     raise Exception('Cannot find OpticStudio')
 
 # load the ZOS-API assemblies
 clr.AddReference(os.path.join(os.sep, zemaxDir, r'ZOSAPI.dll'))
 clr.AddReference(os.path.join(os.sep, zemaxDir, r'ZOSAPI_Interfaces.dll'))
-import ZOSAPI # type: ignore
+import ZOSAPI
 
 TheConnection = ZOSAPI.ZOSAPI_Connection()
 if TheConnection is None:
@@ -52,7 +52,6 @@ if TheApplication.IsValidLicenseForAPI == False:
 TheSystem = TheApplication.PrimarySystem
 if TheSystem is None:
     raise Exception("Unable to acquire Primary system")
-
 
 def reshape(data, x, y, transpose = False):
     """Converts a System.Double[,] to a 2D list for plotting or post processing
@@ -71,11 +70,11 @@ def reshape(data, x, y, transpose = False):
     """
     if type(data) is not list:
         data = list(data)
-    var_lst = [y] * x
+    var_lst = [y] * x;
     it = iter(data)
     res = [list(islice(it, i)) for i in var_lst]
     if transpose:
-        return transpose(res)
+        return self.transpose(res);
     return res
     
 def transpose(data):
@@ -95,13 +94,9 @@ def transpose(data):
         data = list(data)
     return list(map(list, zip(*data)))
 
-
 print('Connected to OpticStudio')
 
 # The connection should now be ready to use.  For example:
 print('Serial #: ', TheApplication.SerialCode)
 
 # Insert Code Here
-TheSystemData = TheSystem.SystemData
-
-TheSystemData.Aperture.ApetureValue = 10.0

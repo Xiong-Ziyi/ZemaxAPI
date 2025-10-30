@@ -21,15 +21,15 @@ import ZOSAPI_NetHelper # type: ignore
 
 #pathToInstall = ''
 # uncomment the following line to use a specific instance of the ZOS-API assemblies
-pathToInstall = r'\C:\Program Files\Zemax OpticStudio'
+pathToInstall = r'C:\C:\Program Files\Zemax OpticStudio'
 
 # connect to OpticStudio
-success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize(pathToInstall)
+success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize(pathToInstall);
 
 zemaxDir = ''
 if success:
-    zemaxDir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory()
-    print('Found OpticStudio at:   %s' + zemaxDir)
+    zemaxDir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory();
+    print('Found OpticStudio at:   %s' + zemaxDir);
 else:
     raise Exception('Cannot find OpticStudio')
 
@@ -53,7 +53,6 @@ TheSystem = TheApplication.PrimarySystem
 if TheSystem is None:
     raise Exception("Unable to acquire Primary system")
 
-
 def reshape(data, x, y, transpose = False):
     """Converts a System.Double[,] to a 2D list for plotting or post processing
     
@@ -75,7 +74,7 @@ def reshape(data, x, y, transpose = False):
     it = iter(data)
     res = [list(islice(it, i)) for i in var_lst]
     if transpose:
-        return transpose(res)
+        return self.transpose(res)
     return res
     
 def transpose(data):
@@ -94,7 +93,6 @@ def transpose(data):
     if type(data) is not list:
         data = list(data)
     return list(map(list, zip(*data)))
-
 
 print('Connected to OpticStudio')
 

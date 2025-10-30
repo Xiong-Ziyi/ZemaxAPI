@@ -1,0 +1,7 @@
+使用python及pythonnet包（如果python版本是3.7，可以安装pythonnet-2.5.1-cp37-cp37m-win_amd64.whl），在ZOS 20.2上运行两个程序。
+1. 希望PythonZOSConnection.py能正常输出：
+Found OpticStudio at: 【zos20.2的安装目录】
+Link to ZOSAPI successfully!
+
+2.希望PythonStandaloneApplication.py能正常输出：
+Link to ZOSAPI successfully!
