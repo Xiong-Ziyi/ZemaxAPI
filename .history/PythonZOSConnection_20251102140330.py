@@ -191,7 +191,4 @@ Surface[4].Thickness = 50.0
 Surface[4].Comment = "Compensator"
 Surface[4].SurfaceData.Par1.DoubleValue = 20.0
 
-Surface[5].Thickness = 50.0
-Surface[5].Comment = "Rear Fixed Group"
-Surface[5].SurfaceData.Par1.DoubleValue = 20.0
     

@@ -1,6 +1,8 @@
 import clr, os, winreg
 from itertools import islice
 
+from .PCZL import PCZL
+
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
 #    1. Ensure you are running a Python version compatible with PythonNET. Check the article "ZOS-API using Python.NET" or
@@ -194,4 +196,14 @@ Surface[4].SurfaceData.Par1.DoubleValue = 20.0
 Surface[5].Thickness = 50.0
 Surface[5].Comment = "Rear Fixed Group"
 Surface[5].SurfaceData.Par1.DoubleValue = 20.0
-    
+
+# Multi-configuration Setup
+SysMCE = TheSystem.MCE
+
+THIC = ZOSAPI.Editors.MCE.MultiConfigOperandType.THIC
+
+SysMCE.AddConfiguration(False)
+SysMCE.AddOperand()
+SysMCE.AddOperand()
+
+

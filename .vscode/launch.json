@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "python": "D:\\Python 3.8.10\\python.exe",
+            "python": "D:\\Msc.Photonics\\ZemaxAPI\\.venv\\Scripts\\python.exe",
             "pythonArgs": ["-i"],
             "console": "integratedTerminal"
         }

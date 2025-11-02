@@ -1,6 +1,8 @@
 import clr, os, winreg
 from itertools import islice
 
+from .PCZL import PCZL
+
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
 #    1. Ensure you are running a Python version compatible with PythonNET. Check the article "ZOS-API using Python.NET" or

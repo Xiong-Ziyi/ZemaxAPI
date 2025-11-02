@@ -151,7 +151,7 @@ num_surfaces = SysLDE.NumberOfSurfaces
 print("Number of surfaces before insertion: ", num_surfaces)
 
 if num_surfaces == 3:
-    for i in range(4): # range(4) = [0, 1, 2, 3]
+    for i in range(4):
         SysLDE.AddSurface()
 
 num_surfaces = SysLDE.NumberOfSurfaces
@@ -187,11 +187,8 @@ Surface[3].Thickness = 50.0
 Surface[3].Comment = "Variator"
 Surface[3].SurfaceData.Par1.DoubleValue = 20.0
 
-Surface[4].Thickness = 50.0
-Surface[4].Comment = "Compensator"
-Surface[4].SurfaceData.Par1.DoubleValue = 20.0
+Surface[3].Thickness = 50.0
+Surface[3].Comment = "Compensator"
+Surface[3].SurfaceData.Par1.DoubleValue = 20.0
 
-Surface[5].Thickness = 50.0
-Surface[5].Comment = "Rear Fixed Group"
-Surface[5].SurfaceData.Par1.DoubleValue = 20.0
     

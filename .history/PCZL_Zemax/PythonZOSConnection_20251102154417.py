@@ -1,6 +1,8 @@
 import clr, os, winreg
 from itertools import islice
 
+# from .PCZL import PCZL
+
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
 #    1. Ensure you are running a Python version compatible with PythonNET. Check the article "ZOS-API using Python.NET" or
@@ -194,4 +196,30 @@ Surface[4].SurfaceData.Par1.DoubleValue = 20.0
 Surface[5].Thickness = 50.0
 Surface[5].Comment = "Rear Fixed Group"
 Surface[5].SurfaceData.Par1.DoubleValue = 20.0
-    
+
+# Multi-configuration Setup
+SysMCE = TheSystem.MCE
+
+THIC = ZOSAPI.Editors.MCE.MultiConfigOperandType.THIC
+
+SysMCE.AddConfiguration(False)
+
+num_operands = SysMCE.NumberOfOperands
+
+if num_operands == 1:
+    for i in range(2):
+        SysMCE.AddOperand()
+
+num_operands = SysMCE.NumberOfOperands
+print("Number of MC operands: ", num_operands)
+
+MC_Operand=[SysMCE.GetOperandAt(i) for i in range(1, num_operands + 1)] # Use a list to store all MC operands objects
+MC_Operand.insert(0, None)  # to make the index start from 1
+
+for i in range(1, num_operands + 1):
+    MC_Operand[i].ChangeType(THIC)
+    MC.Operand[i].Param1 = i + 1  # Surface Number
+
+
+
+

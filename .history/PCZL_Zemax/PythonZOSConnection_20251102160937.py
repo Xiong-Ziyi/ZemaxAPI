@@ -1,6 +1,8 @@
 import clr, os, winreg
 from itertools import islice
 
+from PCZL_Zemax import PCZL
+
 # This boilerplate requires the 'pythonnet' module.
 # The following instructions are for installing the 'pythonnet' module via pip:
 #    1. Ensure you are running a Python version compatible with PythonNET. Check the article "ZOS-API using Python.NET" or
@@ -101,7 +103,11 @@ print('Connected to OpticStudio')
 # The connection should now be ready to use.  For example:
 print('Serial #: ', TheApplication.SerialCode)
 
+
+
 # Insert Code Here
+
+
 
 # Define System Explore
 SysExplore = TheSystem.SystemData
@@ -132,8 +138,8 @@ if num_fields > 1:
         SysExplore.Wavelengths.RemoveWavelength(i)
 '''
 
-if num_wavelengths == 1:
 # Set Wavelengths Values of Cellphone lens
+if num_wavelengths == 1:
     SysExplore.Wavelengths.GetWavelength(1).Wavelength = 0.5876
     SysExplore.Wavelengths.GetWavelength(1).Weight = 24
     SysExplore.Wavelengths.AddWavelength(0.6563, 11)
@@ -176,22 +182,57 @@ Paraxial_Focal_Length = ZOSAPI.Editors.LDE.SurfaceColumn.Par1
 for i in range(2, num_surfaces - 1):
     st = SysLDE.GetSurfaceAt(i).GetSurfaceTypeSettings(Paraxial_Surface)
     Surface[i].ChangeType(st)
-    
-Surface[2].Thickness = 50.0
+
+# Get the values of the PCZL parameters
+pczl = PCZL.PCZL(f_3 = 1.2, m_4 = 3, d_12s = 0.5, d_34s = 0.5, q = 0.2785, num_samples=101)
+
 Surface[2].Comment = "Front Fixed Group"
-
 #Surface[2].GetSurfaceCell(Paraxial_Focal_Length).DoubleValue = 20.0
-Surface[2].SurfaceData.Par1.DoubleValue = 20.0
+Surface[2].SurfaceData.Par1.DoubleValue = pczl.f_1
 
-Surface[3].Thickness = 50.0
 Surface[3].Comment = "Variator"
-Surface[3].SurfaceData.Par1.DoubleValue = 20.0
+Surface[3].SurfaceData.Par1.DoubleValue = pczl.f_2
 
-Surface[4].Thickness = 50.0
 Surface[4].Comment = "Compensator"
-Surface[4].SurfaceData.Par1.DoubleValue = 20.0
+Surface[4].SurfaceData.Par1.DoubleValue = pczl.f_3
 
 Surface[5].Thickness = 50.0
 Surface[5].Comment = "Rear Fixed Group"
-Surface[5].SurfaceData.Par1.DoubleValue = 20.0
-    
+Surface[5].SurfaceData.Par1.DoubleValue = pczl.f_4
+
+# Multi-configuration Setup
+SysMCE = TheSystem.MCE
+
+THIC = ZOSAPI.Editors.MCE.MultiConfigOperandType.THIC
+
+num_configs = SysMCE.NumberOfConfigurations
+
+if num_configs == 1:
+    SysMCE.AddConfiguration(False)
+
+num_operands = SysMCE.NumberOfOperands
+
+if num_operands == 1:
+    for i in range(2):
+        SysMCE.AddOperand()
+
+num_operands = SysMCE.NumberOfOperands
+print("Number of MC operands: ", num_operands)
+
+MC_Operand=[SysMCE.GetOperandAt(i) for i in range(1, num_operands + 1)] # Use a list to store all MC operands objects
+MC_Operand.insert(0, None)  # to make the index start from 1
+
+for i in range(1, num_operands + 1):
+    MC_Operand[i].ChangeType(THIC)
+    MC_Operand[i].Param1 = i + 1  # Surface Number
+
+# Thickness values for short focal length position
+MC_Operand[1].GetOperandCell(1).DoubleValue = pczl.d_12s    # Thickness of Surface 2
+MC_Operand[2].GetOperandCell(1).DoubleValue = pczl.d_23[-1] # Thickness of Surface 3
+MC_Operand[3].GetOperandCell(1).DoubleValue = pczl.d_34s    # Thickness of Surface 4
+
+# Thickness values for long focal length position
+MC_Operand[1].GetOperandCell(2).DoubleValue = pczl.d_12[0]  # Thickness of Surface 2
+MC_Operand[2].GetOperandCell(2).DoubleValue = pczl.d_23[0]  # Thickness of Surface 3
+MC_Operand[3].GetOperandCell(2).DoubleValue = pczl.d_34[0]  # Thickness of Surface 4
+
