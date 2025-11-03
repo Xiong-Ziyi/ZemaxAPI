@@ -145,19 +145,15 @@ MC_Operand[2].GetOperandCell(2).DoubleValue = pczl.d_23[0]  # Thickness of Surfa
 MC_Operand[3].GetOperandCell(2).DoubleValue = pczl.d_34[0]  # Thickness of Surface 4
 
 # Export Cross Section
-SysLayout = TheSystem.Tools.Layouts.OpenCrossSectionExport()
+SysTool = TheSystem.Tools
+SysToolCS = SysTool.Layouts.CrossSection
 
-SysLayout.StartSurface = 0
-SysLayout.EndSurface = -1
-SysLayout.NumberOfRays = 5
-SysLayout.Wavelength = 6
-SysLayout.Field = 9
-# SysLayout.MarginalAndChiefRayOnly = True
-SysLayout.OutputPixelWidth = 1920
-SysLayout.OutputPixelHeight = 1080
-SysLayout.OutputFileName = r"C:\Users\xiong\Desktop\CrossSection.png"
-SysLayout.SaveImageAsFile = True
-SysLayout.Run()
-SysLayout.WaitForCompletion()
-SysLayout.Close()
+SysToolCS.StartSurface = -1
+SysToolCS.EndSurface = -1
+SysToolCS.NumberOfRays = 5
+SysToolCS.Wavelength = -1
+SysToolCS.Field = -1
+# SysToolCS.MarginalAndChiefRayOnly = True
+SysToolCS.OutputFileName = r"C:\Users\xiong\Desktop\CrossSection.png"
+
 

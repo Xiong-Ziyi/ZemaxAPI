@@ -158,6 +158,5 @@ SysLayout.OutputPixelHeight = 1080
 SysLayout.OutputFileName = r"C:\Users\xiong\Desktop\CrossSection.png"
 SysLayout.SaveImageAsFile = True
 SysLayout.Run()
-SysLayout.WaitForCompletion()
 SysLayout.Close()
 
