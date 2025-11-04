@@ -156,7 +156,7 @@ for i in range(1, num_configs + 1):
     # SysLayout.MarginalAndChiefRayOnly = True
     SysLayout.OutputPixelWidth = 1920
     SysLayout.OutputPixelHeight = 1080
-    SysLayout.OutputFileName = fr"C:\Users\xiong\Desktop\CrossSectio_Config{i}.png"
+    SysLayout.OutputFileName = r"C:\Users\xiong\Desktop\CrossSectio_Config{i}.png"
     SysLayout.SaveImageAsFile = True
     SysLayout.Configuration = i
     SysLayout.RunAndWaitForCompletion()
