@@ -1,7 +1,7 @@
 import clr, os, winreg
 from itertools import islice
 
-class PythonStandaloneApplication(object):
+class PythonZOSConnection(object):
     class LicenseException(Exception):
         pass
     class ConnectionException(Exception):
@@ -18,10 +18,9 @@ class PythonStandaloneApplication(object):
         NetHelper = os.path.join(os.sep, zemaxData[0], r'ZOS-API\Libraries\ZOSAPI_NetHelper.dll')
         winreg.CloseKey(aKey)
         clr.AddReference(NetHelper)
-        import ZOSAPI_NetHelper
+        import ZOSAPI_NetHelper # type: ignore
         
         # Find the installed version of OpticStudio
-        #if len(path) == 0:
         if path is None:
             isInitialized = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize()
         else:
@@ -32,12 +31,12 @@ class PythonStandaloneApplication(object):
         if isInitialized:
             dir = ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory()
         else:
-            raise PythonStandaloneApplication.InitializationException("Unable to locate Zemax OpticStudio.  Try using a hard-coded path.")
+            raise PythonZOSConnection.InitializationException("Unable to locate Zemax OpticStudio.  Try using a hard-coded path.")
 
         # add ZOS-API referencecs
         clr.AddReference(os.path.join(os.sep, dir, "ZOSAPI.dll"))
         clr.AddReference(os.path.join(os.sep, dir, "ZOSAPI_Interfaces.dll"))
-        import ZOSAPI
+        import ZOSAPI # type: ignore
 
         # create a reference to the API namespace
         self.ZOSAPI = ZOSAPI
@@ -49,39 +48,32 @@ class PythonStandaloneApplication(object):
         self.TheConnection = ZOSAPI.ZOSAPI_Connection()
 
         if self.TheConnection is None:
-            raise PythonStandaloneApplication.ConnectionException("Unable to initialize .NET connection to ZOSAPI")
+            raise PythonZOSConnection.ConnectionException("Unable to initialize .NET connection to ZOSAPI")
 
-        self.TheApplication = self.TheConnection.CreateNewApplication()
+        self.TheApplication = self.TheConnection.ConnectAsExtension(0)
         if self.TheApplication is None:
-            raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")
+            raise PythonZOSConnection.InitializationException("Unable to acquire ZOSAPI application")
 
         if self.TheApplication.IsValidLicenseForAPI == False:
-            raise PythonStandaloneApplication.LicenseException("License is not valid for ZOSAPI use")
+            raise PythonZOSConnection.LicenseException("License is not valid for ZOSAPI use")
 
         self.TheSystem = self.TheApplication.PrimarySystem
         if self.TheSystem is None:
-            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")
-
-    def __del__(self):
-        if self.TheApplication is not None:
-            self.TheApplication.CloseApplication()
-            self.TheApplication = None
-        
-        self.TheConnection = None
+            raise PythonZOSConnection.SystemNotPresentException("Unable to acquire Primary system")
     
     def OpenFile(self, filepath, saveIfNeeded):
         if self.TheSystem is None:
-            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")
+            raise PythonZOSConnection.SystemNotPresentException("Unable to acquire Primary system")
         self.TheSystem.LoadFile(filepath, saveIfNeeded)
 
     def CloseFile(self, save):
         if self.TheSystem is None:
-            raise PythonStandaloneApplication.SystemNotPresentException("Unable to acquire Primary system")
+            raise PythonZOSConnection.SystemNotPresentException("Unable to acquire Primary system")
         self.TheSystem.Close(save)
 
     def SamplesDir(self):
         if self.TheApplication is None:
-            raise PythonStandaloneApplication.InitializationException("Unable to acquire ZOSAPI application")
+            raise PythonZOSConnection.InitializationException("Unable to acquire ZOSAPI application")
 
         return self.TheApplication.SamplesDir
 
@@ -112,11 +104,11 @@ class PythonStandaloneApplication(object):
         """
         if type(data) is not list:
             data = list(data)
-        var_lst = [y] * x;
+        var_lst = [y] * x
         it = iter(data)
         res = [list(islice(it, i)) for i in var_lst]
         if transpose:
-            return self.transpose(res);
+            return self.transpose(res)
         return res
     
     def transpose(self, data):
@@ -135,21 +127,3 @@ class PythonStandaloneApplication(object):
         if type(data) is not list:
             data = list(data)
         return list(map(list, zip(*data)))
-
-if __name__ == '__main__':
-    zos = PythonStandaloneApplication()
-    
-    # load local variables
-    ZOSAPI = zos.ZOSAPI
-    TheApplication = zos.TheApplication
-    TheSystem = zos.TheSystem
-    
-    # Insert Code Here
-
-    print("Link to ZOSAPI successfully!")
-    
-    # This will clean up the connection to OpticStudio.
-    # Note that it closes down the server instance of OpticStudio, so you for maximum performance do not do
-    # this until you need to.
-    del zos
-    zos = None

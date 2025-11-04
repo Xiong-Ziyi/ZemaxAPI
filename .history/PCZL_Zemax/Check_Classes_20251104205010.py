@@ -1,4 +1,4 @@
-import base_interactive as base_interactive
+import PCZL_Zemax.base_interactive as base_interactive
 import inspect
 
 zos = base_interactive.PythonZOSConnection()
