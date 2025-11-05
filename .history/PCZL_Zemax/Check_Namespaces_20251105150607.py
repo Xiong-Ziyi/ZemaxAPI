@@ -17,16 +17,9 @@ print('Serial #: ', TheApplication.SerialCode)
 Layouts = TheSystem.Tools.Layouts
 
 
-def explore_api(obj):
+def explore_namespace(obj):
     # 1) See all attribute names
     print("Attribute names:\n", dir(obj))
 
     # 2) Filter only callable members (methods)
     print("Callable members (methods):\n", [name for name in dir(obj) if callable(getattr(obj, name)) and not name.startswith('_')])
-
-    # 3) Or, more detailed: get actual type info
-    for name, member in inspect.getmembers(obj):
-        if not name.startswith('_'):
-            print(name, ":", type(member))
-
-explore_api(Layouts)
